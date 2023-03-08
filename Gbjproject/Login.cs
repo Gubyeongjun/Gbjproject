@@ -31,6 +31,8 @@ namespace Gbjproject
         #region Form_Load_시(dll_파일_접근_및_ID저장_유무_판단)
         private void Login_Load(object sender, EventArgs e)
         {
+            this.Location = new Point(640, 300);
+
             //exe파일이 위치한 경로
             dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             dir += subdir;

@@ -18,8 +18,8 @@ namespace Gbjproject
         private bool sts_readonly = false;  // 추가 입력 시 tb_dept_cd가 readOnly로 바뀌는 것을 방지
 
         TextBox[] tb { get; set; }
-
         public Button[] btn { get; set; }
+        public string btn_status { get; set; }
 
         public GroupManager()
         {
@@ -37,6 +37,8 @@ namespace Gbjproject
             tb = new TextBox[4] { tb_cdg_grpcd, tb_cdg_grpnm, tb_cdg_length, tb_cdg_nmleng };
 
             panel3.Enabled = false;
+
+            btn_status = utility.BtnControl_func(btn, "0");
         }
         #endregion
 
@@ -93,6 +95,7 @@ namespace Gbjproject
             if (dataGridView1.RowCount == 0) return;
 
             this.dataGridView1_SelectionChanged(null, null);
+            btn_status = utility.BtnControl_func(btn, "1");
         }
         #endregion
 
@@ -118,10 +121,12 @@ namespace Gbjproject
 
             // 행의 상태를 추가 상태 = "A" 로 변경
             dataGridView1.Rows[rowIdx].Cells["status"].Value = "A";
+            dataGridView1.Rows[rowIdx].Cells["cdg_use"].Value = false;
 
             // 추가한 행으로 컨트롤 활성화
             dataGridView1.CurrentCell = dataGridView1.Rows[rowIdx].Cells[1];
             tb_cdg_grpcd.Focus();
+            btn_status = utility.BtnControl_func(btn, "2");
         }
         #endregion
 
@@ -135,6 +140,7 @@ namespace Gbjproject
             dataGridView1.SelectedRows[0].Cells["status"].Value = "U";
 
             utility.panel_enable_func(panel3, dataGridView1.SelectedRows[0]);
+            btn_status = utility.BtnControl_func(btn, "2");
         }
         #endregion
 
@@ -207,6 +213,33 @@ namespace Gbjproject
 
             MessageBox.Show("저장되었습니다.");
             utility.panel_enable_func(panel3, dataGridView1.SelectedRows[0]);
+        }
+        #endregion
+
+        #region 취소버튼
+        public void btnCancel_Click()
+        {
+            int a = 0;
+
+            for (int i = 0; i < dataGridView1.RowCount; i++)
+            {
+                if (dataGridView1.Rows[i].Cells["status"].Value?.ToString() != null) a++;
+                else continue;
+            }
+
+            string msg = "현재 " + a + "건의 작업이 완료되지 않았습니다.\n완료되지 않은 작업을 취소하시겠습니까?";
+
+            if (MessageBox.Show(msg, "작업 취소 알림", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                status_src = true;
+                dataGridView1.Rows.Clear();
+                status_src = false;
+                btn_status = utility.BtnControl_func(btn, "0");
+            }
+            else return;
+
+            for (int i = 0; i < tb.Length; i++)
+                utility.error_clear_func(tb, errorProvider1, tb[i]);
         }
         #endregion
 
@@ -365,7 +398,24 @@ namespace Gbjproject
         #region dataGridView_RowsRemoved_됐을_때(RowCount<=0)
         private void dataGridView1_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
         {
-            if (dataGridView1.RowCount <= 0) utility.text_empty_func(panel3);
+            int i = 0;
+
+            if (dataGridView1.RowCount <= 0)
+            {
+                utility.text_empty_func(panel3);
+                return;
+            }
+
+            for (i = 0; i < dataGridView1.RowCount; i++)
+            {
+                if (dataGridView1.Rows[i].Cells["status"].Value?.ToString() == null)
+                    continue;
+                else
+                    break;
+            }
+
+            if (i == dataGridView1.RowCount)
+                utility.BtnControl_func(btn, "1");
         }
         #endregion
 

@@ -31,7 +31,7 @@ namespace Gbjproject
         {
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("사원정보관리");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("개인경력 및 가족관계");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("조회");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("사원정보조회");
             System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("인사기록관리", new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2,
@@ -123,8 +123,8 @@ namespace Gbjproject
             treeNode2.Name = "노드1";
             treeNode2.Text = "개인경력 및 가족관계";
             treeNode3.Name = "노드2";
-            treeNode3.Tag = "";
-            treeNode3.Text = "조회";
+            treeNode3.Tag = "Pro101:empMgr1:928:555:Y:사원정보조회";
+            treeNode3.Text = "사원정보조회";
             treeNode4.Name = "노드3";
             treeNode4.Text = "인사기록관리";
             treeNode5.Name = "노드1";
@@ -167,6 +167,7 @@ namespace Gbjproject
             this.tabControl1.Size = new System.Drawing.Size(931, 683);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl1_DrawItem);
+            this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
             this.tabControl1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tabControl1_MouseClick);
             // 
             // Main

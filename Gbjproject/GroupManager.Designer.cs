@@ -262,6 +262,7 @@ namespace Gbjproject
             this.status.HeaderText = "상태";
             this.status.Name = "status";
             this.status.ReadOnly = true;
+            this.status.Visible = false;
             // 
             // cdg_grpcd
             // 

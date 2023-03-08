@@ -33,8 +33,9 @@ namespace Gbjproject
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.src_unit_grpcd = new System.Windows.Forms.ComboBox();
             this.src_unit_nm = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -89,8 +90,9 @@ namespace Gbjproject
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.panel1, 2);
             this.panel1.Controls.Add(this.comboBox3);
-            this.panel1.Controls.Add(this.comboBox2);
             this.panel1.Controls.Add(this.comboBox1);
+            this.panel1.Controls.Add(this.comboBox2);
+            this.panel1.Controls.Add(this.src_unit_grpcd);
             this.panel1.Controls.Add(this.src_unit_nm);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
@@ -105,33 +107,41 @@ namespace Gbjproject
             // 
             this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(510, 26);
+            this.comboBox3.Location = new System.Drawing.Point(632, 26);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(100, 20);
             this.comboBox3.TabIndex = 2;
-            this.comboBox3.Visible = false;
             this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(396, 26);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(100, 20);
-            this.comboBox2.TabIndex = 2;
-            this.comboBox2.Visible = false;
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // comboBox1
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(94, 26);
+            this.comboBox1.Location = new System.Drawing.Point(420, 26);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(100, 20);
             this.comboBox1.TabIndex = 2;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(526, 26);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(100, 20);
+            this.comboBox2.TabIndex = 2;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            // 
+            // src_unit_grpcd
+            // 
+            this.src_unit_grpcd.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.src_unit_grpcd.FormattingEnabled = true;
+            this.src_unit_grpcd.Location = new System.Drawing.Point(94, 26);
+            this.src_unit_grpcd.Name = "src_unit_grpcd";
+            this.src_unit_grpcd.Size = new System.Drawing.Size(100, 20);
+            this.src_unit_grpcd.TabIndex = 2;
+            this.src_unit_grpcd.SelectedIndexChanged += new System.EventHandler(this.src_unit_grpcd_SelectedIndexChanged);
             // 
             // src_unit_nm
             // 
@@ -313,6 +323,7 @@ namespace Gbjproject
             this.status.HeaderText = "상태";
             this.status.Name = "status";
             this.status.ReadOnly = true;
+            this.status.Visible = false;
             // 
             // unit_grpcd
             // 
@@ -392,7 +403,7 @@ namespace Gbjproject
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox src_unit_nm;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox src_unit_grpcd;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox tb_unit_use;
         private System.Windows.Forms.TextBox tb_unit_cd;
@@ -407,6 +418,7 @@ namespace Gbjproject
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
         private System.Windows.Forms.DataGridViewTextBoxColumn unit_grpcd;
         private System.Windows.Forms.DataGridViewTextBoxColumn unit_cd;
