@@ -33,10 +33,6 @@ namespace Gbjproject
 
             if (btn.Tag.Equals("btn_exit"))
             {
-                if (!(MessageBox.Show("프로그램을 종료하시겠습니까?","프로그램 종료",MessageBoxButtons.YesNo,MessageBoxIcon.Information)==DialogResult.Yes))
-                {
-                    return;
-                }
                 Application.Exit();
                 return;
             }

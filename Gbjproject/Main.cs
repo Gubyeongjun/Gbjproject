@@ -23,8 +23,6 @@ namespace Gbjproject
         private string id;
         private string pwd;
 
-        public Label Message_Label { get; set; }
-        
         public Button[] btn { get; set; }
 
         public Main()
@@ -40,9 +38,7 @@ namespace Gbjproject
         }
 
         private void Main_Load(object sender, EventArgs e)
-        {
-            this.Location = new Point(360, 100);
-
+        {   
             // 여백주기 => 여백 주지 않을 시 텍스트와 이미지가 겹쳐서 보임.
             tabControl1.Padding = new Point(20, 4);
 
@@ -224,39 +220,14 @@ namespace Gbjproject
         }
         #endregion
 
-        #region treeView_click하여_새_탭_생성_시_버튼컨트롤_동작하기_위해_btn_값_넘겨주기
         private void tab_setValue()
         {
             if (tabControl1.SelectedTab == null) return;
 
-            // 선택되어 있는 탭의 Form 정보를 저장
             Form form = (Form)tabControl1.SelectedTab.Controls[0];
-            // type을 Form 으로 저장
             Type type = form.GetType();
 
-            // type(해당 form)에 btn 이름의 변수에 Parameter Main.btn의 값을 저장
             type.GetProperty("btn")?.SetValue(form, btn);
         }
-        #endregion
-
-        #region tab_select_시_탭_별_버튼상태_확인_후_세팅하기
-        private void tabControl1_Selected(object sender, TabControlEventArgs e)
-        {
-            if (tabControl1.SelectedTab == null) return;
-
-            // 선택되어 있는 탭의 Form 정보를 저장
-            Form form = (Form)tabControl1.SelectedTab.Controls[0];
-            // type을 Form 으로 저장
-            Type type = form.GetType();
-
-            // type(해당 Form)에 btn_status 이름의 속성을 저장
-            PropertyInfo pi = type.GetProperty("btn_status");
-            if (pi != null)
-            {
-                // 해당 form에 있는 btn_status의 값을 가져와 버튼 컨트롤하기
-                utility.SetFuncBtn2(btn, pi.GetValue(form) as String);
-            }
-        }
-        #endregion
     }
 }

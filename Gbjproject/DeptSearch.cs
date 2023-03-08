@@ -12,7 +12,9 @@ using Oracle.ManagedDataAccess.Client;
 namespace Gbjproject
 {
     public partial class DeptSearch : Form
-    {   
+    {
+
+        TextBox textBox;
         string result;
 
         public string GetResult
@@ -32,18 +34,11 @@ namespace Gbjproject
 
         private void DeptSearch_Load(object sender, EventArgs e)
         {
-            this.Location = new Point(640, 180);
-
             dataGridView1.Rows.Clear();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count <= 0) return;
-
-            result = (String)dataGridView1.SelectedRows[0].Cells[0].Value + ":" +
-                     (String)dataGridView1.SelectedRows[0].Cells[1].Value;
-
             this.Close();
         }
 

@@ -61,9 +61,9 @@ namespace Gbjproject
         #endregion
 
         #region Button_Control1
-        static public string BtnControl_func(Button[] btn, string func)
+        static public void BtnControl_func(Button[] btn, string func)
         {
-            if (btn.Length == 0) return String.Empty;
+            if (btn.Length == 0) return;
             /*
              *  0 : 조회, 1 : 입력, 2 : 수정, 3 : 삭제, 4 : 저장, 5 : 취소, 6 : 인쇄, 7 : 종료
              */
@@ -72,17 +72,15 @@ namespace Gbjproject
             // 종료는 항상 true
             if (func.Equals("0")) btn_func = "10000001";    // 조회 true -- 조회만 가능한 곳에 사용
             if (func.Equals("1")) btn_func = "11110001";    // 조회, 입력, 수정, 삭제 true -- 입력, 수정, 삭제가 가능한 곳에 초기 상태
-                                                            //                               확인 또는 취소 버튼 누른 후
             if (func.Equals("2")) btn_func = "01111101";    // 입력, 수정, 삭제, 저장, 취소 true -- 입력 또는 수정 버튼 누른 후
-            
+            if (func.Equals("2")) btn_func = "01110001";    // 입력, 수정, 삭제 true -- 확인 또는 취소 버튼 누른 후
 
             SetFuncBtn2(btn, btn_func);
-            return btn_func;
         }
         #endregion
 
         #region Button_control2
-        static public string SetFuncBtn2(Button[] btn, string func)
+        static private string SetFuncBtn2(Button[] btn, string func)
         {
             if (btn.Length == 0) return "";
             if (string.IsNullOrEmpty(func)) return "";
@@ -221,7 +219,7 @@ namespace Gbjproject
         }
         #endregion
 
-        #region Text.split(영문반환)
+        #region Text.split(한글찾기)
         static public string split_func(ComboBox combo)
         {
             String[] combos = combo.Text.Split(':');
@@ -276,7 +274,5 @@ namespace Gbjproject
             panel.Enabled = status;
         }
         #endregion
-
-        
     }
 }

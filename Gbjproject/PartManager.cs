@@ -18,9 +18,8 @@ namespace Gbjproject
         private bool sts_readonly = false;  // 추가 입력 시 tb_dept_cd가 readOnly로 바뀌는 것을 방지
 
         TextBox[] tb { get; set; }
-        Label Message_Label { get; set; }
+        Label msg_label { get; set; }
         public Button[] btn { get; set; }
-        public string btn_status { get; set; }  // 현재 form의 버튼 상태 저장 후에 다시 현재 form으로 돌아왔을 때 버튼 상태 불러오기
 
         public PartManager()
         {
@@ -39,7 +38,7 @@ namespace Gbjproject
 
             panel2.Enabled = false;
 
-            btn_status = utility.BtnControl_func(btn, "0");
+            utility.BtnControl_func(btn, "0");
         }
         #endregion
 
@@ -100,9 +99,8 @@ namespace Gbjproject
             }
             
             this.dataGridView1_SelectionChanged(null, null);
-
             /*msg_label.Text = utility.message_func("조회");*/
-            btn_status = utility.BtnControl_func(btn, "1");
+            utility.BtnControl_func(btn, "1");
         }
         #endregion
 
@@ -128,12 +126,10 @@ namespace Gbjproject
 
             // 행의 상태를 추가 상태 = "A" 로 변경
             dataGridView1.Rows[rowIdx].Cells["status"].Value = "A";
-            dataGridView1.Rows[rowIdx].Cells["dept_use"].Value = false;
 
             // 추가한 행으로 컨트롤 활성화
             dataGridView1.CurrentCell = dataGridView1.Rows[rowIdx].Cells[1];
             tb_dept_cd.Focus();
-            btn_status = utility.BtnControl_func(btn, "2");
         }
         #endregion
 
@@ -143,11 +139,10 @@ namespace Gbjproject
             if (dataGridView1.RowCount <= 0) return;
 
             // 수정버튼 클릭 시 저장, 취소 버튼 활성화
-            // 수정 버튼 클릭 전 까지 textbox readonly true, checkbox enabled false; <- 이 말이 의미는 수정 버튼을 눌렀을 때 2줄 밑 panel_enable_func실행 하겠단 뜻
+            // 수정 버튼 클릭 전 까지 textbox readonly true, checkbox enabled false;
             dataGridView1.SelectedRows[0].Cells["status"].Value = "U";
 
             utility.panel_enable_func(panel2, dataGridView1.SelectedRows[0]);
-            btn_status = utility.BtnControl_func(btn, "2");
         }
         #endregion
 
@@ -169,7 +164,7 @@ namespace Gbjproject
                 dataGridView1.Rows.RemoveAt(row.Index);
             }
             else if (MessageBox.Show("부서코드 : " + row.Cells["dept_cd"].Value.ToString() + "\n부서명 : " +
-                                row.Cells["dept_nm1"].Value.ToString() + "\n해당 자료를 삭제하시겠습니까?"
+                                row.Cells["dept_nm1"].Value.ToString() + "\n자료를 삭제하시겠습니까?"
                                 , "삭제알림", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 OracleConnection con = null;
@@ -207,7 +202,6 @@ namespace Gbjproject
                 string sts = row.Cells["status"].Value.ToString();
 
                 if (sts == null) continue;
-                // oracle db에 연결하여 삽입, 수정 실행하는 함수
                 else ora_cud_func(con, row, sts);
             }
 
@@ -221,34 +215,6 @@ namespace Gbjproject
 
             MessageBox.Show("저장되었습니다.");
             utility.panel_enable_func(panel2, dataGridView1.SelectedRows[0]);
-            btn_status = utility.BtnControl_func(btn, "1");
-        }
-        #endregion
-
-        #region 취소버튼
-        public void btnCancel_Click()
-        {
-            int a = 0;
-            
-            for (int i = 0; i < dataGridView1.RowCount; i++)
-            {
-                if (dataGridView1.Rows[i].Cells["status"].Value?.ToString() != null) a++;
-                else continue;
-            }
-
-            string msg = "현재 " + a + "건의 작업이 완료되지 않았습니다.\n완료되지 않은 작업을 취소하시겠습니까?";
-
-            if (MessageBox.Show(msg,"작업 취소 알림", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                status_src = true;
-                dataGridView1.Rows.Clear();
-                status_src = false;
-                btn_status = utility.BtnControl_func(btn, "0");
-            }
-            else return;
-
-            for(int i = 0; i < tb.Length; i++)
-                utility.error_clear_func(tb, errorProvider1, tb[i]);
         }
         #endregion
 
@@ -338,7 +304,7 @@ namespace Gbjproject
             PropertyInfo info;
             Control control;
             sts_readonly = true;
-            
+
             // select 된 행의 cells["status"]의 값이 "A"일 경우 tb_dept_cd.ReadOnly = false; 시키기
             tb_dept_cd.ReadOnly = (dataGridView1.SelectedRows[0].Cells["status"].Value?.ToString()) == "A" ? false : true;
             utility.panel_enable_func(panel2, dataGridView1.SelectedRows[0]);
@@ -407,24 +373,7 @@ namespace Gbjproject
         #region dataGridView_RowsRemoved_됐을_때(RowCount<=0)
         private void dataGridView1_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
         {
-            int i = 0;
-
-            if (dataGridView1.RowCount <= 0)
-            {
-                utility.text_empty_func(panel2);
-                return;
-            }
-
-            for (i = 0; i < dataGridView1.RowCount; i++)
-            {
-                if (dataGridView1.Rows[i].Cells["status"].Value?.ToString() == null)
-                    continue;
-                else
-                    break;
-            }
-
-            if (i == dataGridView1.RowCount)
-                utility.BtnControl_func(btn, "1");
+            if (dataGridView1.RowCount <= 0) utility.text_empty_func(panel2);
         }
         #endregion
 

@@ -33,8 +33,8 @@ namespace Gbjproject
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -84,6 +84,13 @@ namespace Gbjproject
             this.panel2.Size = new System.Drawing.Size(611, 114);
             this.panel2.TabIndex = 1;
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(253, 48);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 21);
+            this.textBox1.TabIndex = 0;
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(373, 48);
@@ -93,13 +100,6 @@ namespace Gbjproject
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(253, 48);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 21);
-            this.textBox1.TabIndex = 0;
             // 
             // ZipApiForm
             // 
