@@ -41,6 +41,9 @@
     <Reference Include="Oracle.ManagedDataAccess, Version=4.122.21.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
       <HintPath>..\packages\Oracle.ManagedDataAccess.21.9.0\lib\net462\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=108.0.3.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.108.0.3\lib\netstandard2.0\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -100,11 +103,11 @@
     <Compile Include="DeptSearch.Designer.cs">
       <DependentUpon>DeptSearch.cs</DependentUpon>
     </Compile>
-    <Compile Include="empMgr1.cs">
+    <Compile Include="empBas.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="empMgr1.Designer.cs">
-      <DependentUpon>empMgr1.cs</DependentUpon>
+    <Compile Include="empBas.Designer.cs">
+      <DependentUpon>empBas.cs</DependentUpon>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -162,8 +165,8 @@
     <EmbeddedResource Include="DeptSearch.resx">
       <DependentUpon>DeptSearch.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="empMgr1.resx">
-      <DependentUpon>empMgr1.cs</DependentUpon>
+    <EmbeddedResource Include="empBas.resx">
+      <DependentUpon>empBas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

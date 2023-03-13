@@ -14,7 +14,7 @@ namespace Gbjproject.SQL
         static public string cdg_update = @" update gbj_cdg set cdg_grpnm = :grpnm, cdg_length = :length, cdg_nmleng = :nmleng, cdg_use = :use 
                                              where cdg_grpcd = :cd";
 
-        static public string unit_update = @" update gbj_unit set unit_cd = :cd, unit_nm1 = :nm1, unit_nm2 = :nm2, unit_seq = :seq, unit_use = :use 
-                                              where unit_grpcd = :grpcd";
+        static public string unit_update = @" update gbj_unit set unit_nm1 = :nm1, unit_nm2 = :nm2, unit_seq = :seq, unit_use = :use 
+                                              where unit_grpcd = :grpcd and unit_cd = :cd";
     }
 }

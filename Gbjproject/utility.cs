@@ -61,9 +61,9 @@ namespace Gbjproject
         #endregion
 
         #region Button_Control1
-        static public void BtnControl_func(Button[] btn, string func)
+        static public string BtnControl_func(Button[] btn, string func)
         {
-            if (btn.Length == 0) return;
+            if (btn.Length == 0) return String.Empty;
             /*
              *  0 : 조회, 1 : 입력, 2 : 수정, 3 : 삭제, 4 : 저장, 5 : 취소, 6 : 인쇄, 7 : 종료
              */
@@ -72,15 +72,17 @@ namespace Gbjproject
             // 종료는 항상 true
             if (func.Equals("0")) btn_func = "10000001";    // 조회 true -- 조회만 가능한 곳에 사용
             if (func.Equals("1")) btn_func = "11110001";    // 조회, 입력, 수정, 삭제 true -- 입력, 수정, 삭제가 가능한 곳에 초기 상태
+                                                            //                               확인 또는 취소 버튼 누른 후
             if (func.Equals("2")) btn_func = "01111101";    // 입력, 수정, 삭제, 저장, 취소 true -- 입력 또는 수정 버튼 누른 후
-            if (func.Equals("2")) btn_func = "01110001";    // 입력, 수정, 삭제 true -- 확인 또는 취소 버튼 누른 후
+            
 
             SetFuncBtn2(btn, btn_func);
+            return btn_func;
         }
         #endregion
 
         #region Button_control2
-        static private string SetFuncBtn2(Button[] btn, string func)
+        static public string SetFuncBtn2(Button[] btn, string func)
         {
             if (btn.Length == 0) return "";
             if (string.IsNullOrEmpty(func)) return "";
@@ -178,6 +180,24 @@ namespace Gbjproject
         }
         #endregion
 
+        #region errorProvider_사용(empBas)
+        static public void error_use_func(string[] str, Panel panel, ErrorProvider error)
+        {
+            foreach (Control ctrl in panel.Controls)
+            {
+                for (int i = 0; i < str.Length; i++)
+                {
+                    if (ctrl.Name == str[i])
+                    {
+                        if (String.IsNullOrEmpty(ctrl.Text))
+                            error.SetError(ctrl, "필수 기입 사항입니다.");
+                    }
+                    else continue;
+                }
+            }
+        }
+        #endregion
+
         #region errorProvider_해제
         static public void error_clear_func(TextBox[] tb, ErrorProvider error, object sender)
         {
@@ -219,7 +239,7 @@ namespace Gbjproject
         }
         #endregion
 
-        #region Text.split(한글찾기)
+        #region Text.split(영문반환)
         static public string split_func(ComboBox combo)
         {
             String[] combos = combo.Text.Split(':');
@@ -265,14 +285,21 @@ namespace Gbjproject
         }
         #endregion
 
-        #region panel_enabled
-        static public void panel_enable_func(Panel panel, DataGridViewRow row)
+        #region panel_enabled(Panel_or_TableLayoutPanel)
+        static public void panel_enable_func(Object sender, DataGridViewRow row)
         {
+            // parameter panel => object sender --- 23.03.10
+
+            // event가 실행된 object control
+            Control control = sender as Control;
+            
             string sts = row.Cells["status"].Value?.ToString();
             bool status = sts == "U" || sts == "A" ? true : false;
 
-            panel.Enabled = status;
+            control.Enabled = status;
         }
         #endregion
+
+        
     }
 }

@@ -21,7 +21,7 @@ namespace Gbjproject
         ComboBox[] combos { get; set; }
 
         public Button[] btn { get; set; }
-
+        public string btn_status { get; set; }
         public UnitManager()
         {
             InitializeComponent();
@@ -31,14 +31,15 @@ namespace Gbjproject
         private void UnitManager_Load(object sender, EventArgs e)
         {
             tb = new TextBox[4] { tb_unit_cd, tb_unit_nm1, tb_unit_nm2, tb_unit_seq };
-            combos = new ComboBox[3] { comboBox1, comboBox2, comboBox3 };
+            combos = new ComboBox[4] { src_unit_grpcd, comboBox1, comboBox2, comboBox3 };
 
             panel3.Enabled = false;
-            
-            if(combos[1].Visible == true || combos[2].Visible == true)
+
+            if (combos[1].Visible == true || combos[2].Visible == true || combos[3].Visible == true)
             {
                 combos[1].Visible = false;
                 combos[2].Visible = false;
+                combos[3].Visible = false;
             }
 
             OracleConnection con = null;
@@ -56,12 +57,14 @@ namespace Gbjproject
                 combos[0].Items.Add("");
                 combos[1].Items.Add("");
                 combos[2].Items.Add("");
+                combos[3].Items.Add("");
 
                 while (odr.Read())
                 {
                     combos[0].Items.Add((String)odr["grp"]);
-                    combos[1].Items.Add(odr["cdg_length"]);
-                    combos[2].Items.Add(odr["cdg_nmleng"]);
+                    if(odr["grp"].ToString().IndexOf(':') != -1) { combos[1].Items.Add(odr["grp"].ToString().Substring(0, odr["grp"].ToString().IndexOf(':'))); }
+                    combos[2].Items.Add(odr["cdg_length"]);
+                    combos[3].Items.Add(odr["cdg_nmleng"]);
                 }
                 odr.Close();
             }
@@ -75,6 +78,8 @@ namespace Gbjproject
             }
 
             combos[0].SelectedIndex = 0;
+
+            btn_status = utility.BtnControl_func(btn, "0");
         }
         #endregion
 
@@ -129,6 +134,12 @@ namespace Gbjproject
             }
 
             this.dataGridView1_SelectionChanged(null, null);
+
+            /*if (src_unit_grpcd.SelectedIndex == 0)
+                btn_status = utility.BtnControl_func(btn, "0");
+            else
+                btn_status = utility.BtnControl_func(btn, "1");*/
+            btn_status = utility.BtnControl_func(btn, "1");
         }
         #endregion
 
@@ -161,10 +172,12 @@ namespace Gbjproject
             // 행의 상태를 추가 상태 = "A" 로 변경
             dataGridView1.Rows[rowIdx].Cells["status"].Value = "A";
             dataGridView1.Rows[rowIdx].Cells["unit_grpcd"].Value = utility.split_func(combos[0]);
+            dataGridView1.Rows[rowIdx].Cells["unit_use"].Value = false;
 
             // 추가한 행으로 컨트롤 활성화
             dataGridView1.CurrentCell = dataGridView1.Rows[rowIdx].Cells[1];
             tb_unit_cd.Focus();
+            btn_status = utility.BtnControl_func(btn, "2");
         }
         #endregion
 
@@ -178,6 +191,7 @@ namespace Gbjproject
             dataGridView1.SelectedRows[0].Cells["status"].Value = "U";
 
             utility.panel_enable_func(panel3, dataGridView1.SelectedRows[0]);
+            btn_status = utility.BtnControl_func(btn, "2");
         }
         #endregion
 
@@ -244,12 +258,40 @@ namespace Gbjproject
             while (k < dataGridView1.RowCount)
             {
                 if (!(String.IsNullOrEmpty(dataGridView1.Rows[k].Cells["status"].Value?.ToString())))
-                    dataGridView1.Rows[k].Cells["status"].Value = "";
+                    dataGridView1.Rows[k].Cells["status"].Value = String.Empty;
                 k++;
             }
 
             MessageBox.Show("저장되었습니다.");
             utility.panel_enable_func(panel3, dataGridView1.SelectedRows[0]);
+            btn_status = utility.BtnControl_func(btn, "1");
+        }
+        #endregion
+
+        #region 취소버튼
+        public void btnCancel_Click()
+        {
+            int a = 0;
+
+            for (int i = 0; i < dataGridView1.RowCount; i++)
+            {
+                if (dataGridView1.Rows[i].Cells["status"].Value?.ToString() != null) a++;
+                else continue;
+            }
+
+            string msg = "현재 " + a + "건의 작업이 완료되지 않았습니다.\n완료되지 않은 작업을 취소하시겠습니까?";
+
+            if (MessageBox.Show(msg, "작업 취소 알림", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                status_src = true;
+                dataGridView1.Rows.Clear();
+                status_src = false;
+                btn_status = utility.BtnControl_func(btn, "0");
+            }
+            else return;
+
+            for (int i = 0; i < tb.Length; i++)
+                utility.error_clear_func(tb, errorProvider1, tb[i]);
         }
         #endregion
 
@@ -362,6 +404,7 @@ namespace Gbjproject
                     if (info != null)
                     {
                         //Value?를 사용한 이유 >> 값이 null이면 null 반환, 값이 null이 아니면 value 값을 String으로 변환해서 반환
+                        
                         info.SetValue(control, dataGridView1.SelectedRows[0].Cells[col].Value?.ToString());
                     }
                 }
@@ -381,6 +424,9 @@ namespace Gbjproject
                 }
             }
             sts_readonly = false;
+
+            if (dataGridView1.SelectedRows[0].Cells["unit_grpcd"].Value?.ToString() == null) return;
+            else combos[1].SelectedIndex = combos[1].Items.IndexOf(dataGridView1.SelectedRows[0].Cells["unit_grpcd"].Value);
         }
         #endregion
 
@@ -409,21 +455,29 @@ namespace Gbjproject
         #endregion
 
         #region comboBox_SelectedIndexChanged
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void src_unit_grpcd_SelectedIndexChanged(object sender, EventArgs e)
         {
             errorProvider1.SetError(combos[0], "");
 
             combos[1].SelectedIndex = combos[0].SelectedIndex;
-            combos[2].SelectedIndex = combos[0].SelectedIndex;
+            
+            /*combos[2].SelectedIndex = combos[0].SelectedIndex;
+            combos[3].SelectedIndex = combos[0].SelectedIndex;*/
 
-            // 버튼 컨트롤하기(combobox1.index 변경 시 조회만 가능하도록 하고 조회 후 추가, 수정, 삭제 버튼 열기)
-            // 버튼 컨트롤하기(combobox1.index가 0일때는 조회만 가능하도록 하기)
+            // 버튼 컨트롤하기(src_unit_grpcd.index 변경 시 조회만 가능하도록 하고 조회 후 추가, 수정, 삭제 버튼 열기)
+            // 버튼 컨트롤하기(src_unit_grpcd.index가 0일때는 조회만 가능하도록 하기)
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            combos[2].SelectedIndex = combos[1].SelectedIndex;
+            combos[3].SelectedIndex = combos[1].SelectedIndex;
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        {   
             ComboBox combo = (sender as ComboBox);
-            if (combo.SelectedIndex == 0) return;
+            if (combo.SelectedIndex <= 0) return;
             if (combo.Name.Equals("comboBox2"))
             {
                 tb_unit_cd.MaxLength = int.Parse(combo.SelectedItem.ToString());
@@ -483,12 +537,12 @@ namespace Gbjproject
 
                     // oracleDB에 선택된 행의 값 update하기
                     cmd.CommandText = SQL.SQL_update.unit_update;
-                    cmd.Parameters.Add("cd", OracleDbType.Varchar2).Value = row.Cells["unit_cd"].Value;
                     cmd.Parameters.Add("nm1", OracleDbType.Varchar2).Value = row.Cells["unit_nm1"].Value;
                     cmd.Parameters.Add("nm2", OracleDbType.Varchar2).Value = row.Cells["unit_nm2"].Value;
                     cmd.Parameters.Add("seq", OracleDbType.Int32).Value = row.Cells["unit_seq"].Value;
                     cmd.Parameters.Add("use", OracleDbType.Varchar2).Value = (Boolean)row.Cells["unit_use"].Value == true ? "Y" : "N";
                     cmd.Parameters.Add("grpcd", OracleDbType.Varchar2).Value = row.Cells["unit_grpcd"].Value;
+                    cmd.Parameters.Add("cd", OracleDbType.Varchar2).Value = row.Cells["unit_cd"].Value;
 
                     // save_sql 구문 실행
                     cmd.ExecuteNonQuery();
@@ -514,6 +568,9 @@ namespace Gbjproject
                 if (con != null) con.Close();
             }
         }
+
         #endregion
+
+        
     }
 }
